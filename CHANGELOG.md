@@ -2,6 +2,34 @@
 
 > Complete history of the KIRO ISO project — newest first. Each entry explains not just what changed, but why it was done and what benefit it brings. Daily rebuilds (version bump + mirrorlist refresh only) are grouped into a single line.
 
+## 2026.08.21
+
+### `docs/comparisons/` removed — distro studies move to the offline Kiro-HQ studies archive
+
+The four `KIRO-VS-*.md` files (Arch, CachyOS, Garuda, Prism) are gone from this repo.
+They were never really ISO documentation: they are working notes about *other* distros'
+configuration, written to decide what Kiro should adopt, and they contain the kind of
+detail — machine specifics, unfinished verdicts, "verify this before acting" items — that
+does not belong in a published repository. They now live in a single offline studies
+archive in Kiro-HQ, which is Insync-synced and never becomes a git repo.
+
+- **`docs/comparisons/`** — deleted (4 files). Nothing else in the repo read them.
+- **`docs/WHAT-CHANGED-TO-THE-ISO.md`** — the two links to `KIRO-VS-PRISM.md` became prose:
+  the Prism comparison is described where it mattered (the security baseline is still
+  defensible) without pointing at a file that is no longer here. No local paths are named,
+  per the rule that machine-specific detail never ships in a public repo.
+- **Not touched:** `docs/kernels/` (`KERNEL_COMPARISON.md`, the two AI kernel studies,
+  `comparison-usage-kernels.md`). That set reads as contributor documentation for *why this
+  ISO ships this kernel*, which is a fair thing for a public ISO repo to answer — its move is
+  a separate decision.
+
+**Why now:** today's CachyOS quarterly re-check was first written into this repo, which
+surfaced the rule — comparison studies live in Kiro-HQ and stay offline. The new studies were
+relocated before anything was committed; this commit removes the legacy four that had been
+published since May.
+
+---
+
 ## 2026.08.17
 
 ### Stop a GitHub rate limit from killing the build: the `.bashrc` fetch now retries and falls back to the clone

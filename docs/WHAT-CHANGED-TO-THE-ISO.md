@@ -5,7 +5,7 @@ A rolling release log of what's actually different between Kiro ISO builds — k
 Related docs:
 
 - [DISTRO_TESTING.md](../DISTRO_TESTING.md) — per-build manual test matrix.
-- [KIRO-VS-PRISM.md](./comparisons/KIRO-VS-PRISM.md) — security/config baseline comparison with Prism.
+- Security/config baseline comparison with Prism — kept in the offline Kiro-HQ studies archive, not in this repo.
 
 ---
 
@@ -186,7 +186,7 @@ In-tree `audit.sh` scripts in both `kiro-iso` and `kiro-iso-next` were removed o
 - **PAM** — `system-auth` shipped with `audit=0` on `pam_faillock.so` lines; pam_faillock errors suppressed on kernels without audit support; the conflicting `etc/pam.d/system-auth` from earlier builds removed (pambase ownership conflict).
 - **udev** — `ENV{DEVTYPE}` instead of bare `DEVTYPE` in the input-optimisation rule; backwards `DEVTYPE` audit logic fixed.
 - **HID autosuspend** — chmod +x added, dmesg-nopasswd sudoers entry added, then the whole `udev-hid-autosuspend` callout removed because systemd 254+ blocks `/usr/local/bin/` callouts from udev.
-- **Comparison baseline** — [KIRO-VS-PRISM.md](./comparisons/KIRO-VS-PRISM.md) added: side-by-side Kiro vs Prism security-config comparison so each decision is defensible.
+- **Comparison baseline** — a side-by-side Kiro vs Prism security-config comparison was written so each decision is defensible; it lives in the offline Kiro-HQ studies archive.
 
 ### Installer & build polish
 
