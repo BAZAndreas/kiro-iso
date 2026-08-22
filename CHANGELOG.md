@@ -2,6 +2,15 @@
 
 > Complete history of the KIRO ISO project — newest first. Each entry explains not just what changed, but why it was done and what benefit it brings. Daily rebuilds (version bump + mirrorlist refresh only) are grouped into a single line.
 
+## 2026.08.22
+
+Daily rebuild — version bump `v26.08.20` → `v26.08.22` across the three lockstep files
+(`archiso/profiledef.sh`, `archiso/airootfs/etc/dev-rel`, `build-scripts/build-the-iso.sh`)
+plus `BUILD_TIMES.md`. No configuration changes in this repo. The ISO built from this bump was
+verified end-to-end by `/kiro-check` on both a live boot and an installed system: all six
+`kiro_final` cleanup paths confirmed removed on install, with `"Remove installation files:
+SUCCESS"` in `/var/log/Calamares.log`.
+
 ## 2026.08.21
 
 ### `docs/comparisons/` removed — distro studies move to the offline Kiro-HQ studies archive
