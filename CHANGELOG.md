@@ -11,6 +11,13 @@ verified end-to-end by `/kiro-check` on both a live boot and an installed system
 `kiro_final` cleanup paths confirmed removed on install, with `"Remove installation files:
 SUCCESS"` in `/var/log/Calamares.log`.
 
+The matching **real-metal** validation is now logged in `DISTRO_TESTING.md` — the previous entry
+was v26.07.01 from 2026-06-30, which left 20 non-doc commits across `kiro-iso`,
+`kiro-calamares-config` and `kiro-system-files` shipping untested on record. The new entry covers
+the v26.08.22 ISO on real hardware: clean install, `kiro-audit` 131/0/1, and the single FAIL
+traced to a bug in `kiro-audit`'s microcode check rather than to the ISO (fixed the same day in
+`kiro-system-files`).
+
 ## 2026.08.21
 
 ### `docs/comparisons/` removed — distro studies move to the offline Kiro-HQ studies archive

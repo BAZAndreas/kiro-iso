@@ -4,6 +4,44 @@ Results of boot and install testing for kiro-iso builds. Newest first.
 
 ---
 
+## 2026-08-22 — Production v26.08.22 release ISO: REAL-METAL install — default install, 0 real FAIL
+
+The **`v26.08.22` release ISO** (`ISO_BUILD` Sat Aug 22 11:46:57 CEST 2026, ISO file 11:54,
+build 8m53s) installed on a **real-metal test box** (Intel, Samsung SSD 870 EVO 500GB, real UEFI
+firmware). This is the test that validates every ISO-affecting commit landed since the 2026-06-30
+v26.07.01 run — 20 non-doc commits across `kiro-iso` (6), `kiro-calamares-config` (7) and
+`kiro-system-files` (7), including the bootctl-failure gate and the microcode anti-downgrade guard.
+
+| Target (real metal) | FS / encryption | Bootloader | Result |
+|---------------------|-----------------|------------|--------|
+| Kiro default (XFCE/ohmychadwm) | **ext4**, unencrypted | UEFI / systemd-boot | Clean install; **kiro-audit 131 / 0 / 1** |
+
+**The single kiro-audit FAIL was a false positive in the audit itself, not a defect** —
+`check_microcode()` looked only for a standalone `/boot/*-ucode.img` and did not recognise
+Arch's `microcode` mkinitcpio hook, which embeds the vendor blob in the initramfs early cpio.
+Microcode was verified working: `intel-ucode 20260812-1` (current — the anti-downgrade guard
+held, no rollback to the May blob), `kernel/x86/microcode/GenuineIntel.bin` present in the early
+cpio, and the kernel log shows `microcode: Updated early from: 0x000000e2` to
+`Current revision: 0x00000100`. `kiro-audit` was fixed the same day to detect the hook layout.
+
+Shipped-content verification on the installed system:
+- **Release identity:** `/etc/dev-rel` `ISO_RELEASE=v26.08.22`.
+- **Package currency:** the ISO pkglist carries every package changed since v26.08.20 —
+  `kiro-calamares-config` 26.08-02 -> **26.08-05**, `kiro-system-files` 26.07-08 -> **26.08-01**,
+  `archlinux-tweak-tool-gtk4` 26.08-01 -> **26.08-02**, `calamares` -16 -> **-17**.
+- **New mount options applied end-to-end:** `/etc/fstab` matches the rewritten `mount.conf` /
+  `fstab.conf` exactly — efi `defaults,umask=0077`, ext4 root `defaults,noatime`, swap `defaults`,
+  and `/tmp` as tmpfs `defaults,noatime,mode=1777` (SSD root, so the `ssd` branch of `tmpOptions`).
+- **kiro_final cleanup:** `"Remove installation files: SUCCESS"` in `/var/log/Calamares.log`;
+  `10-archiso.conf`, `do-not-suspend.conf`, getty autologin and the polkit/sudoers live-env rules
+  all confirmed removed; no archiso hooks in `mkinitcpio.conf`.
+- All 11 hardening sysctl values, all 10 udev rules, 24/24 `kiro-*` scripts + the `skell` symlink,
+  no orphan man pages, no duplicate `sysctl.d` / `system.conf.d` files.
+- Kernels `linux-cachyos` 7.1.8-1 (+ `linux-zen` fallback); boot 21.3s; 0 pending updates;
+  `pacman -Qk` clean.
+
+This validates the **v26.08.22 production release ISO on real metal**.
+
 ## 2026-06-30 — Production v26.07.01 release ISO: first REAL-METAL install (picard) — default install, 0 FAIL
 
 The same **`v26.07.01` release ISO** validated earlier in VirtualBox, now installed on **real
