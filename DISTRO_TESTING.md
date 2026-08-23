@@ -22,9 +22,12 @@ Delta verification — every change committed between the two builds is baked in
 - **`kiro-system-files` 26.08-01 -> 26.08-02** (pkglist and installed system agree).
   - `kiro-audit` carries `microcode_in_initramfs()` and the new branch fires — PASS, not the old FAIL.
   - Orphaned `kiro-install-tools` documentation gone: no man page, no leftover files owned by the package.
-- **`kiro-calamares-config` 26.08-05 -> 26.08-06** — the `hostname.template` revert. The installer
-  offered the stock `${first}-${product}` name and `/var/log/Calamares.log` shows the matching
-  `Set hostname …` job, so the `kiro-${cpu}` template is gone from the shipped config.
+- **`kiro-calamares-config` 26.08-05 -> 26.08-06** — the `hostname.template` revert. The pkgrel
+  bump is the evidence that the corrected `users.conf` shipped; the config itself is removed at
+  install time, so it cannot be read back afterwards. Cross-check on the installed system:
+  `/var/log/Calamares.log` contains no `kiro-x8664` and no `kiro-systemproductname` — the two names
+  the rejected templates would have produced — and the hostname actually set matches the stock
+  `${first}-${product}` expansion.
 - Also refreshed by the rebuild: `linux-cachyos` 7.1.8-1 -> **7.2.0-1**, `linux-zen` 7.1.8.zen1-3 ->
   **7.1.9.zen1-2**, `mesa` 26.1.8 -> **26.2.1**, `poppler` 26.07 -> **26.08**,
   `cachyos-ananicy-rules-git`, `inkscape`, `jansson`, `libdeflate`, `oh-my-zsh-git`, the two Nerd Fonts.
