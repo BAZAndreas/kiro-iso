@@ -4,6 +4,49 @@ Results of boot and install testing for kiro-iso builds. Newest first.
 
 ---
 
+## 2026-08-23 — Production v26.08.23 release ISO: VirtualBox install — default install, kiro-audit 132 / 0 / 0
+
+The **`v26.08.23` release ISO** (`ISO_BUILD` Sun Aug 23 06:19:44 CEST 2026, ISO file 06:27)
+installed in **VirtualBox** (UEFI, NAT, ext4, unencrypted). This run validates the three
+ISO-affecting changes committed after the v26.08.22 build.
+
+| Target (VirtualBox) | FS / encryption | Bootloader | Result |
+|---------------------|-----------------|------------|--------|
+| Kiro default (XFCE/ohmychadwm) | **ext4**, unencrypted | UEFI / systemd-boot | Clean install; **kiro-audit 132 / 0 / 0** |
+
+**First run with zero FAIL and zero WARN.** The single FAIL of the v26.08.22 real-metal run was
+the `check_microcode()` false positive; the fix shipped in this ISO and the check now reports
+`PASS  Microcode embedded in the initramfs by the mkinitcpio 'microcode' hook`.
+
+Delta verification — every change committed between the two builds is baked in and applied:
+- **`kiro-system-files` 26.08-01 -> 26.08-02** (pkglist and installed system agree).
+  - `kiro-audit` carries `microcode_in_initramfs()` and the new branch fires — PASS, not the old FAIL.
+  - Orphaned `kiro-install-tools` documentation gone: no man page, no leftover files owned by the package.
+- **`kiro-calamares-config` 26.08-05 -> 26.08-06** — the `hostname.template` revert. The installer
+  offered the stock `${first}-${product}` name and `/var/log/Calamares.log` shows the matching
+  `Set hostname …` job, so the `kiro-${cpu}` template is gone from the shipped config.
+- Also refreshed by the rebuild: `linux-cachyos` 7.1.8-1 -> **7.2.0-1**, `linux-zen` 7.1.8.zen1-3 ->
+  **7.1.9.zen1-2**, `mesa` 26.1.8 -> **26.2.1**, `poppler` 26.07 -> **26.08**,
+  `cachyos-ananicy-rules-git`, `inkscape`, `jansson`, `libdeflate`, `oh-my-zsh-git`, the two Nerd Fonts.
+
+Shipped-content verification on the installed system:
+- **Release identity:** `/etc/dev-rel` `ISO_RELEASE=v26.08.23`.
+- **kiro_final cleanup:** `"Remove installation files: SUCCESS"` in `/var/log/Calamares.log`;
+  `/etc/ssh/sshd_config.d/` holds only `20-systemd-userdb.conf` and `99-archlinux.conf` —
+  `10-archiso.conf` absent; `/etc/calamares` gone; `calamares` and `mkinitcpio-archiso` not installed;
+  `kiro-calamares-config` correctly removed post-install (the old 2026-05-18 FAIL stays fixed).
+- **fstab:** efi `defaults,umask=0077`, ext4 root `defaults,noatime`. No `/tmp` tmpfs line — expected,
+  the virtual disk reports as rotational and `tmpOptions` only applies its `ssd` branch to a
+  non-rotational root. Not a regression.
+- **Boot:** 19.3s (kernel 2.2s + initrd 6.2s + userspace 11.0s); `graphical.target` after 9.1s.
+  No failed systemd units. **0 pending updates.**
+- `sshd` is `disabled`/inactive on a fresh install — as designed; `kiro-enable-ssh` is the opt-in.
+  This audit ran over the VirtualBox guest-control channel, so the guest was not modified to test it.
+- `pacman -Qk`: only the known cosmetic `amd-ucode.img` absence (the anti-downgrade guard skips the
+  standalone image; the blob is in the initramfs early cpio) plus root-only `bind` zone files.
+
+This validates the **v26.08.23 production release ISO in VirtualBox**.
+
 ## 2026-08-22 — Production v26.08.22 release ISO: REAL-METAL install — default install, 0 real FAIL
 
 The **`v26.08.22` release ISO** (`ISO_BUILD` Sat Aug 22 11:46:57 CEST 2026, ISO file 11:54,

@@ -2,6 +2,21 @@
 
 > Complete history of the KIRO ISO project — newest first. Each entry explains not just what changed, but why it was done and what benefit it brings. Daily rebuilds (version bump + mirrorlist refresh only) are grouped into a single line.
 
+## 2026.08.23
+
+Daily rebuild — version bump `v26.08.22` → `v26.08.23` across the three lockstep files
+(`archiso/profiledef.sh`, `archiso/airootfs/etc/dev-rel`, `build-scripts/build-the-iso.sh`)
+plus `BUILD_TIMES.md`. No configuration changes in this repo.
+
+The ISO was installed in VirtualBox and audited over the VirtualBox guest-control channel, so the
+guest was not modified to run the check — `sshd` stays disabled on a fresh install, which is
+itself part of the record. Result: **`kiro-audit` 132 PASS / 0 WARN / 0 FAIL**, the first run with
+no findings at all. The three changes committed after the v26.08.22 build are all baked in and
+applied: `kiro-system-files` 26.08-01 → 26.08-02 (the `check_microcode()` fix, which turns the
+previous run's single FAIL into a PASS, and the removal of the orphaned `kiro-install-tools`
+documentation) and `kiro-calamares-config` 26.08-05 → 26.08-06 (the `hostname.template` revert to
+the stock `${first}-${product}`). Logged in `DISTRO_TESTING.md`.
+
 ## 2026.08.22
 
 Daily rebuild — version bump `v26.08.20` → `v26.08.22` across the three lockstep files
