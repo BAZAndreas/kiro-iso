@@ -4,6 +4,69 @@ Results of boot and install testing for kiro-iso builds. Newest first.
 
 ---
 
+## 2026-08-25 — Production v26.08.25 release ISO: VirtualBox install — GRUB + LUKS + btrfs, kiro-audit 146 / 0 / 0
+
+The **`v26.08.25` release ISO** (`ISO_BUILD` Tue Aug 25 06:44:05 CEST 2026, ISO file 06:52)
+installed in **VirtualBox**. First logged run of the **encrypted btrfs** path — the previous
+entry covered ext4/unencrypted, so this exercises LUKS, GRUB and the subvolume layout for the
+first time in this log.
+
+| Target (VirtualBox) | FS / encryption | Bootloader | Result |
+|---------------------|-----------------|------------|--------|
+| Kiro default (XFCE/ohmychadwm) | **btrfs on LUKS** (full-disk encryption) | UEFI / **GRUB** | Clean install; **kiro-audit 146 / 0 / 0** |
+
+**Second consecutive run with zero FAIL and zero WARN**, and across a different install path
+(GRUB/LUKS/btrfs rather than systemd-boot/ext4), which is the more meaningful result — the
+146 checks include the encryption and btrfs paths the 08-23 run never touched.
+
+Delta verification — the three commits made after the v26.08.23 test are baked in and applied:
+- **`kiro-system-files` 26.08-02 → 26.08-04.** `8cbac77` (drop distro attribution from the seven
+  shipped tuning configs) and `3621ef6` (`kiro-audit`: rename the imports section to
+  "Hardening & tuning"). All seven `/etc` configs verified clean on the installed system —
+  no `Adopted from` headers, no dead `garuda-comparison-2026-05-28.md` pointer; `kiro-audit`
+  reports 0 occurrences of the old name and carries the renamed section.
+  *Note:* the fix nearly missed this ISO — `26.08-03` was built seven minutes **before**
+  `8cbac77` landed, so the shipped package still had the old text while reporting the expected
+  version. Caught by extracting the config out of the `.pkg.tar.zst` rather than trusting
+  `pacman -Q`; `26.08-04` (built 06:28) carries it.
+- **`kiro-calamares-config`** `5f6478f` — sidebar current-step style keys renamed for
+  Calamares 3.4. Installer ran to completion with correct branding.
+
+Live-session verification (before install), which an installed system cannot show:
+- **`kiro-trust-desktop-launchers` confirmed working end-to-end** — the fix for this shipped in
+  `calamares-…-17` on 08-22 but had only ever been checked against package contents, because the
+  script installs under `/home/liveuser` and runs only in a live session. On this boot the user
+  unit ran and exited `0/SUCCESS`, the script is mode `0755`, and `cal-kiro.desktop` carries the
+  exec bit, `metadata::trusted: true` and an `xfce-exe-checksum` matching its own sha256 — the
+  value Thunar 4.20 actually tests. Calamares launches from the desktop icon with **no
+  "Untrusted application launcher" prompt** (confirmed by Erik clicking it).
+- **`ohmychadwm` unowned-binary fix confirmed on a fresh ISO.** The only unowned binary in
+  `/usr/local/bin` is `slstatus`, which is correct — it is packaged nowhere else and must be
+  built there. No unowned `ohmychadwm` shadowing the packaged `/usr/bin/ohmychadwm`.
+
+Shipped-content verification on the installed system:
+- **Release identity:** `/etc/dev-rel` `ISO_RELEASE=v26.08.25`.
+- **kiro_final cleanup:** `"Remove installation files: SUCCESS"` and
+  `"Disable cachyos repo: SUCCESS"` in `/var/log/Calamares.log`. `/etc/calamares` gone;
+  `calamares`, `mkinitcpio-archiso` and `kiro-calamares-config` all absent post-install.
+  `/etc/ssh/sshd_config.d/` holds only `20-systemd-userdb.conf` and `99-archlinux.conf` —
+  `10-archiso.conf` absent. No `liveuser` account on the target.
+- **pacman.conf:** `[core] [extra] [nemesis_repo] [chaotic-aur]` active; `#[cachyos]` correctly
+  commented (opt-in post-install, per `kiro_final` step 9); `#[multilib]` commented, which is
+  deliberate — Kiro is not targeting a gaming audience. **`kiro_repo` does not leak to the
+  target**, which closes the long-standing open question in Kiro-HQ's CLAUDE.md.
+- **btrfs layout:** `@`, `@home`, `@root`, `@srv`, `@cache`, `@log`, `@tmp`, `@snapshots` —
+  `snapper 0.13.1-3` installed and already holding 3 snapshots.
+- **systemd-oomd:** enabled and active.
+- **Zero failed units** (`systemctl --failed` empty).
+
+**Observation, not a failure:** the running kernel is `7.1.9-zen1-2-zen` while
+`linux-cachyos 7.2.0-1` is also installed — on this GRUB install the default entry resolved to
+zen rather than cachyos. Worth confirming whether the GRUB entry ordering is intended, since the
+systemd-boot path may order them differently.
+
+---
+
 ## 2026-08-23 — Production v26.08.23 release ISO: VirtualBox install — default install, kiro-audit 132 / 0 / 0
 
 The **`v26.08.23` release ISO** (`ISO_BUILD` Sun Aug 23 06:19:44 CEST 2026, ISO file 06:27)

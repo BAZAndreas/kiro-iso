@@ -2,6 +2,39 @@
 
 > Complete history of the KIRO ISO project — newest first. Each entry explains not just what changed, but why it was done and what benefit it brings. Daily rebuilds (version bump + mirrorlist refresh only) are grouped into a single line.
 
+## 2026.08.25
+
+Version bump `v26.08.23` → `v26.08.25` across the three lockstep files
+(`archiso/profiledef.sh`, `archiso/airootfs/etc/dev-rel`, `build-scripts/build-the-iso.sh`)
+plus `BUILD_TIMES.md`. No configuration changes in this repo — the substance of this release
+comes from two package updates pulled in by the rebuild.
+
+**What this ISO fixes.** `kiro-system-files` 26.08-02 → **26.08-04** removes the distro
+attribution headers from the seven shipped `/etc` tuning configs (and a pointer to a comparison
+document that was never committed), and renames the corresponding `kiro-audit` section to
+"Hardening & tuning". Those seven files install to `/etc` on every Kiro system, so they were the
+most widely published copy of the other distro's name. `kiro-calamares-config` 26.08-06 →
+**26.08-07** renames the sidebar current-step style keys for Calamares 3.4.
+
+**Why 26.08-04 and not 26.08-03.** The attribution fix nearly missed this ISO. `26.08-03` was
+built at 08:21 on 08-23, seven minutes *before* the commit that removed the text landed at 08:28
+— so the shipped package still contained the old headers while reporting exactly the version
+that was supposed to contain the fix. `pacman -Q` agreed on both sides and nothing looked wrong.
+It was caught by extracting the config file out of the `.pkg.tar.zst` instead of trusting the
+version number, and confirmed on a VM installed from v26.08.24 where all seven `/etc` files were
+still stale. `26.08-04` (built 06:28 on 08-25) carries the fix, is registered in
+`nemesis_repo.db`, and is verified clean in this ISO.
+
+**Testing.** Installed in VirtualBox on **GRUB + LUKS + btrfs** — the first encrypted-btrfs run
+in `DISTRO_TESTING.md`, where previous entries covered ext4/systemd-boot. Result:
+**`kiro-audit` 146 PASS / 0 WARN / 0 FAIL**, zero failed units, full Snapper-ready subvolume
+layout with snapper already holding snapshots, and all `kiro_final` cleanup steps reporting
+SUCCESS. `kiro_repo` confirmed absent from the target's `pacman.conf`, which closes a
+long-standing open question. Two fixes that could only ever be verified in a live session were
+also confirmed on this boot: `kiro-trust-desktop-launchers` (Calamares now launches from the
+desktop icon with no "Untrusted application launcher" prompt) and the `ohmychadwm` unowned-binary
+fix. Logged in `DISTRO_TESTING.md`.
+
 ## 2026.08.23
 
 Daily rebuild — version bump `v26.08.22` → `v26.08.23` across the three lockstep files
