@@ -4,6 +4,26 @@
 
 ## 2026.08.25
 
+### `RELEASES.md` — the v26.09.01 release section written
+
+Added the **v26.09.01** entry covering everything shipped since the last public ISO,
+**v26.07.01** — two months of work, since there is no August release. The six intermediate
+version stamps (`v26.07.16`, `v26.08.14`, `.20`, `.22`, `.23`, `.25`) are development builds
+and get no section of their own; the release entry documents the substance instead.
+
+The source was a sweep of every repo in the ecosystem with commits after 2026-07-01, not just
+this one — `archlinux-tweak-tool-gtk4`, `archlinux-logout-gtk4`, `kiro-keybindings`,
+`fish-tweak-tool`, `kiro-system-files`, `kiro-calamares-config`, `kiro-iso-builder`,
+`ohmychadwm`, the 18 KIROTUX Wayland config packages, `hyprland-tweak-tool`, and the
+`celestial-themes` / `celestial-theme-forge` pair. `RELEASES.md` documents the release, not
+this repo's diff, and this repo's own diff for the period is documentation-only.
+
+`(current)` moved from the v26.07.01 heading to v26.09.01, and the file's intro paragraph now
+names v26.09.01 as the current release rather than forward-referencing it.
+
+**Files Modified** — `RELEASES.md`.
+
+
 Version bump `v26.08.23` → `v26.08.25` across the three lockstep files
 (`archiso/profiledef.sh`, `archiso/airootfs/etc/dev-rel`, `build-scripts/build-the-iso.sh`)
 plus `BUILD_TIMES.md`. No configuration changes in this repo — the substance of this release
