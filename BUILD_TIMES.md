@@ -4,6 +4,8 @@ Tracks wall-clock for ISO builds (auto-appended by [`build-scripts/build-the-iso
 
 Useful for spotting cost regressions when changing squashfs compression, kernel set, package list, or Calamares modules.
 
+> **Test machines** are recorded under generic labels — `metal-A` / `metal-B` (bare metal, UEFI / systemd-boot), `metal-C` (bare metal, BIOS / grub, legacy NVIDIA), `kvm-vm` and `<vm-host>` (virtual machines). Real hostnames and network addresses are deliberately not recorded in this repo; use the same labels for new entries.
+
 ## ISO Builds
 
 | When             | Version    | Kernel(s)                  | Squashfs       | Duration | ISO size | Notes                                    |
@@ -105,21 +107,21 @@ Useful for spotting cost regressions when changing squashfs compression, kernel 
 
 | When             | ISO        | Target            | Duration | mkinitcpio passes | Notes                                       |
 |------------------|------------|-------------------|----------|---------------------|---------------------------------------------|
-| 2026-06-09 21:52 | v26.06.09 | erik@192.168.1.16 | 5m58s | 2 | worf — real metal BIOS/grub; new kiro_bootloader GRUB branch ran (grub-install i386-pc -> /dev/sda, SUCCESS); Fermi on nouveau |
-| 2026-06-09 21:48 | v26.06.09 | erik@192.168.1.9 | 3m21s | 2 | picard — real metal UEFI/systemd-boot; new Calamares modules ran; kiro-audit 135/0/0 |
-| 2026-06-09 21:48 | v26.06.09 | erik@192.168.1.14 | 4m21s | 2 | riker — real metal UEFI/systemd-boot; new Calamares modules ran; kiro-audit 139/0/0 |
-| 2026-06-08 16:44 | v26.06.08 | erik@192.168.1.14 | 3m19s | 2 | riker — real metal (UEFI/systemd-boot); grub + kiro-bootloader-grub + spice all stripped, kiro-audit 135/0/0 |
-| 2026-06-08 16:31 | v26.06.08 | erik@192.168.1.9 | 3m20s | 2 | picard — real metal (UEFI/systemd-boot); grub + kiro-bootloader-grub + spice all stripped, kiro-audit 135/0/0 |
-| 2026-06-08 16:16 | v26.06.08 | erik@192.168.1.16 | 5m54s | 2 | worf — real metal (BIOS/grub); kiro-audit GRUB boot-safety PASS |
-| 2026-06-08 15:34 | v26.06.08 | erik@192.168.122.78 | 2m27s | 2 | KVM (BIOS/grub) |
-| 2026-06-07 21:00 | v26.06.07 | erik@192.168.1.14 | 3m16s | 2 | line 2 nonfree (nvidia kept), Intel HD630, v26.06.07 19:40/cfg26.06-08 release ISO |
-| 2026-06-07 20:47 | v26.06.07 | erik@192.168.1.9 | 3m30s | 2 | line 1 free, Intel HD630, v26.06.07 19:40/cfg26.06-08 release ISO |
-| 2026-06-01 07:45 | v26.06.01 | picard | 3m47s | 2 | bare-metal install |
-| 2026-06-01 07:27 | v26.06.01 | riker | 6m1s | 2 | riker reinstall test |
-| 2026-06-01 07:23 | v26.06.01 | worf | 5m53s | 2 | MEDION P7624, BIOS, nouveau |
-| 2026-05-28 19:27 | v26.05.28 | picard (bare metal) | 3m11s | 2 | fresh install — kiro-audit 130/0/0 |
-| 2026-05-28 15:57 | v26.05.28 | riker (bare metal) | 3m12s | 2 | post-ppd-pin fix |
-| 2026-05-28 10:55 | v26.05.28 | riker (bare metal) | 123m28s* | 2 | second physical machine; *duration includes wizard-UI time (mkinitcpio pass count is the relevant install-execution metric — 2 passes, identical to post-fix VM) |
+| 2026-06-09 21:52 | v26.06.09 | metal-C | 5m58s | 2 | metal-C — real metal BIOS/grub; new kiro_bootloader GRUB branch ran (grub-install i386-pc -> /dev/sda, SUCCESS); Fermi on nouveau |
+| 2026-06-09 21:48 | v26.06.09 | metal-A | 3m21s | 2 | metal-A — real metal UEFI/systemd-boot; new Calamares modules ran; kiro-audit 135/0/0 |
+| 2026-06-09 21:48 | v26.06.09 | metal-B | 4m21s | 2 | metal-B — real metal UEFI/systemd-boot; new Calamares modules ran; kiro-audit 139/0/0 |
+| 2026-06-08 16:44 | v26.06.08 | metal-B | 3m19s | 2 | metal-B — real metal (UEFI/systemd-boot); grub + kiro-bootloader-grub + spice all stripped, kiro-audit 135/0/0 |
+| 2026-06-08 16:31 | v26.06.08 | metal-A | 3m20s | 2 | metal-A — real metal (UEFI/systemd-boot); grub + kiro-bootloader-grub + spice all stripped, kiro-audit 135/0/0 |
+| 2026-06-08 16:16 | v26.06.08 | metal-C | 5m54s | 2 | metal-C — real metal (BIOS/grub); kiro-audit GRUB boot-safety PASS |
+| 2026-06-08 15:34 | v26.06.08 | kvm-vm | 2m27s | 2 | KVM (BIOS/grub) |
+| 2026-06-07 21:00 | v26.06.07 | metal-B | 3m16s | 2 | line 2 nonfree (nvidia kept), Intel HD630, v26.06.07 19:40/cfg26.06-08 release ISO |
+| 2026-06-07 20:47 | v26.06.07 | metal-A | 3m30s | 2 | line 1 free, Intel HD630, v26.06.07 19:40/cfg26.06-08 release ISO |
+| 2026-06-01 07:45 | v26.06.01 | metal-A | 3m47s | 2 | bare-metal install |
+| 2026-06-01 07:27 | v26.06.01 | metal-B | 6m1s | 2 | metal-B reinstall test |
+| 2026-06-01 07:23 | v26.06.01 | metal-C | 5m53s | 2 | MEDION P7624, BIOS, nouveau |
+| 2026-05-28 19:27 | v26.05.28 | metal-A (bare metal) | 3m11s | 2 | fresh install — kiro-audit 130/0/0 |
+| 2026-05-28 15:57 | v26.05.28 | metal-B (bare metal) | 3m12s | 2 | post-ppd-pin fix |
+| 2026-05-28 10:55 | v26.05.28 | metal-B (bare metal) | 123m28s* | 2 | second physical machine; *duration includes wizard-UI time (mkinitcpio pass count is the relevant install-execution metric — 2 passes, identical to post-fix VM) |
 | 2026-05-28 08:43 | v26.05.28  | VirtualBox VM     | ~3 min   | 2                   | post-fix: cmdline + hook suppression in place |
 | 2026-05-28 07:21 | v26.05.28  | VirtualBox VM     | ~4 min   | 10                  | baseline: cmdline-dup bug + 5× mkinitcpio churn |
 
@@ -131,7 +133,7 @@ Useful for spotting cost regressions when changing squashfs compression, kernel 
 - **Calamares Installs** — run [`build-scripts/record-install-time.sh`](build-scripts/record-install-time.sh) after each test install. It SSHes into the target, reads `/var/log/Calamares.log` (first/last timestamp = duration; `==> Building image` count = mkinitcpio passes), reads ISO version from `/etc/dev-rel`, and prepends a row. No kiro_final / package-rebuild needed — Calamares already timestamps every log line, so the data is right there. Usage:
   ```bash
   bash build-scripts/record-install-time.sh vm                          # VirtualBox guest on port 2022
-  bash build-scripts/record-install-time.sh picard --notes "bare metal" # named host
-  bash build-scripts/record-install-time.sh riker  --notes "post-fix"   # named host
+  bash build-scripts/record-install-time.sh metal-A --notes "bare metal" # named host
+  bash build-scripts/record-install-time.sh metal-B  --notes "post-fix"   # named host
   bash build-scripts/record-install-time.sh vm     --dry-run            # print, don't write
   ```

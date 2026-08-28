@@ -2,6 +2,8 @@
 
 Results of boot and install testing for kiro-iso builds. Newest first.
 
+> **Test machines** are recorded under generic labels — `metal-A` / `metal-B` (bare metal, UEFI / systemd-boot), `metal-C` (bare metal, BIOS / grub, legacy NVIDIA), `kvm-vm` and `<vm-host>` (virtual machines). Real hostnames and network addresses are deliberately not recorded in this repo; use the same labels for new entries.
+
 ---
 
 ## 2026-08-25 — Production v26.08.25 release ISO: VirtualBox install — GRUB + LUKS + btrfs, kiro-audit 146 / 0 / 0
@@ -151,17 +153,17 @@ Shipped-content verification on the installed system:
 
 This validates the **v26.08.22 production release ISO on real metal**.
 
-## 2026-06-30 — Production v26.07.01 release ISO: first REAL-METAL install (picard) — default install, 0 FAIL
+## 2026-06-30 — Production v26.07.01 release ISO: first REAL-METAL install (metal-A) — default install, 0 FAIL
 
 The same **`v26.07.01` release ISO** validated earlier in VirtualBox, now installed on **real
-hardware** (picard — physical box, Samsung SSD 860 EVO 500GB, real UEFI firmware). This is the
+hardware** (metal-A — physical box, Samsung SSD 860 EVO 500GB, real UEFI firmware). This is the
 bare-metal counterpart to the VBox test below: it confirms the production release installs and
 boots cleanly off real firmware/storage, not just the emulated path. Default-edition install
-validated over SSH (`erik@192.168.1.9`):
+validated over SSH (`<user>@<ip>`):
 
 | Target (real metal) | FS / encryption | Bootloader | Result |
 |---------------------|-----------------|------------|--------|
-| **picard** Kiro default (XFCE/ohmychadwm) | **ext4**, unencrypted | UEFI / systemd-boot 261.1 | Clean install; **kiro-audit 133 / 0 / 0** |
+| **metal-A** Kiro default (XFCE/ohmychadwm) | **ext4**, unencrypted | UEFI / systemd-boot 261.1 | Clean install; **kiro-audit 133 / 0 / 0** |
 
 Verification on the installed system:
 - **Release identity:** `/etc/dev-rel` `ISO_RELEASE=v26.07.01`, `ISO_BUILD=Tue Jun 30 01:18:30 PM CEST 2026` — identical ISO to the VBox run.
@@ -201,7 +203,7 @@ Shipped-content verification on the installed system:
   gone.
 - Kernels `linux-cachyos` 7.1.2-3 (+ `linux-zen` 7.0.14 fallback); sessions `ohmychadwm` / `xfce` /
   `xfce-wayland`; UEFI / systemd-boot; ZRAM 8G zstd; 0 failed units; boot 16.6s; host
-  `erik-virtualbox`, VirtualBox (oracle).
+  `<vm-host>`, VirtualBox (oracle).
 
 This validates the **v26.07.01 production release ISO** on the default edition and clears the
 distro-test staleness check for everything shipping in it.
@@ -228,7 +230,7 @@ Shipped-content verification on the installed system:
   `kiro-calamares-tweak-tool` and `kiro-calamares-config-next` all removed; `/etc/calamares` gone;
   no autologin / nopasswd survivors.
 - Kernel `linux-cachyos` 7.1.2-2 (+ `linux-zen` fallback); sessions `ohmychadwm` / `xfce` /
-  `xfce-wayland`; UEFI / systemd-boot; ZRAM 8G zstd; 0 failed units; boot 15.6s; host `erik-virtualbox`,
+  `xfce-wayland`; UEFI / systemd-boot; ZRAM 8G zstd; 0 failed units; boot 15.6s; host `<vm-host>`,
   VirtualBox (oracle).
 
 This validates the v26.06.28 production ISO on the default edition and **clears the distro-test
@@ -256,7 +258,7 @@ Shipped-content verification on the installed system:
   — signed repos verified out of the box.
 - **kiro-link menu + Onboard themes:** all four `kiro-link-*.desktop` entries and all five
   `Kiro *.theme` Onboard themes present (from `kiro-system-files 26.06-34`).
-- Sessions `xfce` / `xfce-wayland` / `ohmychadwm`; host `erik-virtualbox`, VirtualBox (oracle).
+- Sessions `xfce` / `xfce-wayland` / `ohmychadwm`; host `<vm-host>`, VirtualBox (oracle).
 
 This validates the v26.06.14 production ISO on the default edition and **clears the distro-test
 staleness check** for the day's shipped changes.
@@ -308,14 +310,14 @@ Production `kiro-iso` **v26.06.09** (`ISO_BUILD` 20:58, ISO file 21:04) carrying
 | Target | Firmware / bootloader | New modules ran | Result |
 |--------|----------------------|-----------------|--------|
 | VirtualBox VM (oracle) | UEFI / systemd-boot | `kiro_bootloader`/`kiro_displaymanager`/`kiro_packages` all ran; `Bootloader: systemd-boot` → SUCCESS | **kiro-audit 134 / 0 / 0** |
-| **picard** (real metal, Intel HD630) | UEFI / systemd-boot | all three ran; systemd-boot branch → SUCCESS | **135 / 0 / 0**; install 3m21s |
-| **riker** (real metal, i7-7700K, Intel HD630) | UEFI / systemd-boot | all three ran; systemd-boot branch → SUCCESS | **139 / 0 / 0**; install 4m21s |
-| **worf** (real metal, MEDION P7624, Fermi GT 620M + Intel) | **BIOS / grub** | all three ran; **GRUB branch executed** — `Bootloader: grub (bios)` → `grub-install --target=i386-pc --recheck --force /dev/sda` → `grub-mkconfig -o /boot/grub/grub.cfg` → SUCCESS | **134 / 2 / 0**; install 5m58s |
+| **metal-A** (real metal, Intel HD630) | UEFI / systemd-boot | all three ran; systemd-boot branch → SUCCESS | **135 / 0 / 0**; install 3m21s |
+| **metal-B** (real metal, i7-7700K, Intel HD630) | UEFI / systemd-boot | all three ran; systemd-boot branch → SUCCESS | **139 / 0 / 0**; install 4m21s |
+| **metal-C** (real metal, MEDION P7624, Fermi GT 620M + Intel) | **BIOS / grub** | all three ran; **GRUB branch executed** — `Bootloader: grub (bios)` → `grub-install --target=i386-pc --recheck --force /dev/sda` → `grub-mkconfig -o /boot/grub/grub.cfg` → SUCCESS | **134 / 2 / 0**; install 5m58s |
 
-- **New `kiro_bootloader` validated on BOTH branches:** systemd-boot (VM + picard + riker) and **GRUB/BIOS (worf)** — `grub-install i386-pc → /dev/sda` + `grub-mkconfig` both ran to SUCCESS on real BIOS metal. This was the decisive gap: the rewrite's GRUB branch had no v26.06.09 validation until worf.
+- **New `kiro_bootloader` validated on BOTH branches:** systemd-boot (VM + metal-A + metal-B) and **GRUB/BIOS (metal-C)** — `grub-install i386-pc → /dev/sda` + `grub-mkconfig` both ran to SUCCESS on real BIOS metal. This was the decisive gap: the rewrite's GRUB branch had no v26.06.09 validation until metal-C.
 - **New `kiro_displaymanager` + `kiro_packages`** ran on every target; package-removal cleanup correct (production names — `kiro-calamares-config`/`kiro-calamares-tweak-tool`/`calamares` removed, GRUB removed on systemd-boot).
-- worf's 2 WARN are `NVIDIA Fermi present but nvidia-open-dkms / nvidia-utils not installed` — **expected/benign** (Fermi can't use the open driver; chwd correctly routes it to nouveau). `GRUB boot-safety hooks installed` PASS on the grub box.
-- Install times recorded in [BUILD_TIMES.md](BUILD_TIMES.md) (picard 3m21s, riker 4m21s, worf 5m58s).
+- metal-C's 2 WARN are `NVIDIA Fermi present but nvidia-open-dkms / nvidia-utils not installed` — **expected/benign** (Fermi can't use the open driver; chwd correctly routes it to nouveau). `GRUB boot-safety hooks installed` PASS on the grub box.
+- Install times recorded in [BUILD_TIMES.md](BUILD_TIMES.md) (metal-A 3m21s, metal-B 4m21s, metal-C 5m58s).
 
 ## 2026-06-08 — Production v26.06.08: GRUB boot-safety + spice-vdagent — 4 installs, both firmware paths, 0 FAIL
 
@@ -325,13 +327,13 @@ Production `kiro-iso` **v26.06.08** (built 15:13) carrying the day's two new fea
 |--------|----------|--------|
 | KVM VM (vda) | BIOS / grub | `kiro-bootloader-grub` kept; `kiro-grub-install -> /dev/vda`; both hooks fire on a `grub` reinstall; `spice-vdagent` kept |
 | KVM VM | UEFI / systemd-boot | `grub` + `kiro-bootloader-grub` stripped together; `spice-vdagent` kept (kvm) |
-| **worf** (real metal, MEDION P7624, SATA, Fermi GPU) | BIOS / grub | pkg + both helpers; `kiro-grub-install -> /dev/sda`; **kiro-audit: `PASS GRUB boot-safety hooks installed`** — 134 PASS / 2 WARN / 0 FAIL (the 2 WARN = NVIDIA Fermi on nouveau, expected) |
-| **picard** (real metal, Intel HD630) | UEFI / systemd-boot | `grub` + `kiro-bootloader-grub` + `spice-vdagent` **all stripped**; **kiro-audit 135 / 0 / 0** |
-| **riker** (real metal, Intel HD630) | UEFI / systemd-boot | identical to picard; **kiro-audit 135 / 0 / 0** |
+| **metal-C** (real metal, MEDION P7624, SATA, Fermi GPU) | BIOS / grub | pkg + both helpers; `kiro-grub-install -> /dev/sda`; **kiro-audit: `PASS GRUB boot-safety hooks installed`** — 134 PASS / 2 WARN / 0 FAIL (the 2 WARN = NVIDIA Fermi on nouveau, expected) |
+| **metal-A** (real metal, Intel HD630) | UEFI / systemd-boot | `grub` + `kiro-bootloader-grub` + `spice-vdagent` **all stripped**; **kiro-audit 135 / 0 / 0** |
+| **metal-B** (real metal, Intel HD630) | UEFI / systemd-boot | identical to metal-A; **kiro-audit 135 / 0 / 0** |
 
-- **Disk auto-detection** proven on `sda` (VirtualBox + worf) and `vda` (QEMU) — never the old hardcoded `/dev/sda`.
+- **Disk auto-detection** proven on `sda` (VirtualBox + metal-C) and `vda` (QEMU) — never the old hardcoded `/dev/sda`.
 - **Removal correctness** confirmed in `Calamares.log`: on systemd-boot it logs *"systemd-boot detected. Removing GRUB"* (grub + hook pkg together); on bare metal *"Virtualization type: none"* strips all VM profiles (so spice-vdagent goes too); on kvm only vmware+vbox are stripped (spice-vdagent kept).
-- **New `kiro-audit` check** shows `PASS GRUB boot-safety hooks installed` on a real grub system (worf) and stays correctly **silent** on systemd-boot — audit baseline clean (0 FAIL on every target).
+- **New `kiro-audit` check** shows `PASS GRUB boot-safety hooks installed` on a real grub system (metal-C) and stays correctly **silent** on systemd-boot — audit baseline clean (0 FAIL on every target).
 
 ## 2026-06-07 — Production ISO (19:40 rebuild): encrypted + line-3 chwd + new mirror-refresh — 139 PASS / 0 / 0
 
@@ -355,13 +357,13 @@ chwd: ────────────────────────�
 ```
 The CDN-lead correctly reports `unchanged` because the ISO's mirrorlists already lead with the trusted CDN (baked by `host-prep.sh`), and `pacman -Sy … OK` shows the sync result. This is the production behaviour now (mirrored to `kiro-calamares-config` 26.06-08 via `97a2eb5`), validated here on a real install.
 
-**Bare-metal confirmation on the 19:40 / `26.06-08` release ISO** (picard + riker reinstalled from it, both Intel HD 630):
+**Bare-metal confirmation on the 19:40 / `26.06-08` release ISO** (metal-A + metal-B reinstalled from it, both Intel HD 630):
 | Box | Boot | nvidia outcome | kiro-audit |
 |-----|------|----------------|------------|
-| **picard** | line 1 `free` | open stack removed (chwd skipped); only `linux-firmware-nvidia` left | **136 PASS / 0 WARN / 0 FAIL** |
-| **riker** | line 2 `nonfree` | baked `nvidia-open-dkms/settings/utils` **kept** (chwd + removal both skipped — correct for nonfree) | **134 PASS / 1 WARN / 0 FAIL** |
+| **metal-A** | line 1 `free` | open stack removed (chwd skipped); only `linux-firmware-nvidia` left | **136 PASS / 0 WARN / 0 FAIL** |
+| **metal-B** | line 2 `nonfree` | baked `nvidia-open-dkms/settings/utils` **kept** (chwd + removal both skipped — correct for nonfree) | **134 PASS / 1 WARN / 0 FAIL** |
 
-riker's single WARN is `nvidia-open-dkms installed but no NVIDIA GPU detected` — **expected/benign**: line 2 deliberately keeps the baked driver, and riker has only an Intel iGPU, so the audit correctly notes the driver is installed-but-unused (the mirror image of worf's line-3 `NVIDIA GPU present but nvidia-open-dkms not installed`). Together with the Kiro-normal encrypted line-3 install above, the 19:40 release ISO is now validated across **all three boot entries (free / nonfree / nonfreechwd) plus full-disk encryption**.
+metal-B's single WARN is `nvidia-open-dkms installed but no NVIDIA GPU detected` — **expected/benign**: line 2 deliberately keeps the baked driver, and metal-B has only an Intel iGPU, so the audit correctly notes the driver is installed-but-unused (the mirror image of metal-C's line-3 `NVIDIA GPU present but nvidia-open-dkms not installed`). Together with the Kiro-normal encrypted line-3 install above, the 19:40 release ISO is now validated across **all three boot entries (free / nonfree / nonfreechwd) plus full-disk encryption**.
 
 ---
 
@@ -379,11 +381,11 @@ Ran `/kiro-ready` against the production `kiro-v26.06.07` ISO (built 16:29) and 
 
 **Other `/kiro-ready` gates:** 5 repos' committed code pushed (only doc/internal files uncommitted — `kiro-iso` BUILD_TIMES.md/RELEASES.md, `kiro-iso-next` CHANGELOG.md); no §1/§3 P1 TODO blockers; iso↔iso-next drift all intentional variant pairs (calamares/-next, config/-next, plymouth/-nemesis); production ISO (16:29) postdates latest non-doc commit (15:06); name-leakage scan **0 Tier-1 / 0 Tier-3** (only Tier-2/4 maintainer-script + doc hygiene); CHANGELOG documents the day's changes.
 
-**Bare-metal confirmation — picard (real Intel HD 630, boot line 1 `driver=free`):** clean install from the same `v26.06.07` ISO (`ISO_BUILD` 16:23). `kiro-audit` **135 PASS / 0 WARN / 0 FAIL**. `Calamares.log` shows `kiro_remove_nvidia` running the **new** discovery code: `"Removing NVIDIA packages: nvidia-open-dkms nvidia-settings nvidia-utils"` → `pacman -Rns --noconfirm` removed the open stack in one transaction (~1 GB; dkms removed for both `7.0.11-1-cachyos` and `7.0.11-zen1-1-zen`). Post-install only `linux-firmware-nvidia` remains. Confirms the fixed module runs correctly on metal — but the open stack uses *real* names, so this still does not exercise the 390xx/580xx provide-resolution path.
+**Bare-metal confirmation — metal-A (real Intel HD 630, boot line 1 `driver=free`):** clean install from the same `v26.06.07` ISO (`ISO_BUILD` 16:23). `kiro-audit` **135 PASS / 0 WARN / 0 FAIL**. `Calamares.log` shows `kiro_remove_nvidia` running the **new** discovery code: `"Removing NVIDIA packages: nvidia-open-dkms nvidia-settings nvidia-utils"` → `pacman -Rns --noconfirm` removed the open stack in one transaction (~1 GB; dkms removed for both `7.0.11-1-cachyos` and `7.0.11-zen1-1-zen`). Post-install only `linux-firmware-nvidia` remains. Confirms the fixed module runs correctly on metal — but the open stack uses *real* names, so this still does not exercise the 390xx/580xx provide-resolution path.
 
-**Bare-metal confirmation — riker (real Intel HD 630, boot line 1 `driver=free`):** same `v26.06.07` ISO, identical result — `kiro-audit` **135 PASS / 0 WARN / 0 FAIL**; `Calamares.log` shows `driver=free` → `"Removing NVIDIA packages: nvidia-open-dkms nvidia-settings nvidia-utils"` then `"Skipping chwd because 'driver=free'"`. Two independent metal boxes (picard + riker) now confirm the production open ISO.
+**Bare-metal confirmation — metal-B (real Intel HD 630, boot line 1 `driver=free`):** same `v26.06.07` ISO, identical result — `kiro-audit` **135 PASS / 0 WARN / 0 FAIL**; `Calamares.log` shows `driver=free` → `"Removing NVIDIA packages: nvidia-open-dkms nvidia-settings nvidia-utils"` then `"Skipping chwd because 'driver=free'"`. Two independent metal boxes (metal-A + metal-B) now confirm the production open ISO.
 
-**Bare-metal — worf (real NVIDIA Fermi GT 620M + Intel iGPU, boot line 3 `driver=nonfreechwd`):** installed from the **production open** `v26.06.07` ISO (confirmed: `390xx` appears **0×** in `Calamares.log`; baked stack removed was `nvidia-open-dkms nvidia-settings nvidia-utils`). `kiro_remove_nvidia` removed the open stack, then chwd ran and routed the Fermi card to **nouveau** (`> Successfully installed intel`; active `i915` + `nouveau`). `kiro-audit` **133 PASS / 2 WARN / 0 FAIL** — the 2 WARN (`NVIDIA GPU present but nvidia-open-dkms not installed`, `nvidia-utils not installed`) are **expected/benign** for a legacy-NVIDIA-on-nouveau box (open driver intentionally removed; Fermi can't use it). This validates the **line-3 nonfreechwd path + chwd nouveau routing on real NVIDIA hardware** — but it is the open stack under real names, so it still does **not** exercise the 390xx/580xx provide-resolution path. **Audit-refinement TODO:** kiro-audit should treat nouveau-on-legacy-NVIDIA as valid instead of warning.
+**Bare-metal — metal-C (real NVIDIA Fermi GT 620M + Intel iGPU, boot line 3 `driver=nonfreechwd`):** installed from the **production open** `v26.06.07` ISO (confirmed: `390xx` appears **0×** in `Calamares.log`; baked stack removed was `nvidia-open-dkms nvidia-settings nvidia-utils`). `kiro_remove_nvidia` removed the open stack, then chwd ran and routed the Fermi card to **nouveau** (`> Successfully installed intel`; active `i915` + `nouveau`). `kiro-audit` **133 PASS / 2 WARN / 0 FAIL** — the 2 WARN (`NVIDIA GPU present but nvidia-open-dkms not installed`, `nvidia-utils not installed`) are **expected/benign** for a legacy-NVIDIA-on-nouveau box (open driver intentionally removed; Fermi can't use it). This validates the **line-3 nonfreechwd path + chwd nouveau routing on real NVIDIA hardware** — but it is the open stack under real names, so it still does **not** exercise the 390xx/580xx provide-resolution path. **Audit-refinement TODO:** kiro-audit should treat nouveau-on-legacy-NVIDIA as valid instead of warning.
 
 **★ 390xx provide-resolution fix — PROVEN (the decisive test).** VM `Kiro-E-jfs`, installed from the **`kiro-next-v26.06.07`** ISO (`nvidia_driver=390xx`, `ISO_BUILD` 17:42), boot line 3 `driver=nonfreechwd`. `Calamares.log` shows `kiro_remove_nvidia` discovered the baked **390xx** stack by real name and removed it in one transaction:
 ```
@@ -393,7 +395,7 @@ nvidia-390xx-dkms 390.157-21  -27.19 MiB ; nvidia-390xx-utils -106.63 MiB ; nvid
 ```
 **Install completed** (`kiro_final` ran, no abort); post-install only `linux-firmware-nvidia` remains; **`kiro-audit` 134 PASS / 0 WARN / 0 FAIL**. This is exactly the case the old hardcoded code broke: `pacman -Q nvidia-utils` resolved the provide (`nvidia-390xx-utils`) but `pacman -Rns nvidia-utils` could not → `target not found` → `nvidia-remove-failed` → **install aborted**. The fix (`installed_nvidia_stack()` via `pacman -Qq`, removing real variant names) resolves it — confirmed end-to-end on a real 390xx install. (`kiro-calamares-config@41d9388` / `-next@a7bcd09`.) **580xx** variant is the analogous path (same code, same provide mechanism); validate similarly when a 580xx ISO is installed.
 
-**Verdict:** production `v26.06.07` (normal/open ISO) verified release-ready by full install (VM + picard + riker metal + worf metal/line-3). Today's `kiro_remove_nvidia` install-blocking fix is **PROVEN** on the 390xx provide-resolution path (Kiro-E-jfs) — install no longer aborts on 390xx/580xx ISOs; the staleness gate for `41d9388` is cleared by this logged test. 580xx pending the same check.
+**Verdict:** production `v26.06.07` (normal/open ISO) verified release-ready by full install (VM + metal-A + metal-B metal + metal-C metal/line-3). Today's `kiro_remove_nvidia` install-blocking fix is **PROVEN** on the 390xx provide-resolution path (Kiro-E-jfs) — install no longer aborts on 390xx/580xx ISOs; the staleness gate for `41d9388` is cleared by this logged test. 580xx pending the same check.
 
 ---
 
@@ -464,12 +466,12 @@ Notes:
 **Follow-up shipped same day:** `kiro-audit` gained a `check_disk_format` section (kiro-system-files) that now asserts the encryption directly — LUKS2 per container, `sd-encrypt`/`encrypt` initramfs hook, `/crypto_keyfile.bin` 600 root:root, active dm-crypt mapping — plus INFO lines reporting the chosen root fstype/cipher. `kiro-report` got a matching `section_encryption` (root fs · LUKS2/N-containers · encrypted-swap yes/no), redaction-safe. Re-verified live on **all five VMs** with the new section: normal-ext4 133, LUKS-ext4 137, LUKS-btrfs 139, LUKS-xfs 138, LUKS-jfs 137 — all 0 WARN / 0 FAIL. Both checks read the root fstype generically, so xfs and jfs work with no fs-specific code. `/kiro-syscheck` inherits the asserts via its existing kiro-audit call.
 
 **Bare-metal confirmation (two real machines, same v26.06.04 ISO):**
-- **picard** — tested across two reinstalls, both **0 WARN / 0 FAIL**, "all checks passed":
+- **metal-A** — tested across two reinstalls, both **0 WARN / 0 FAIL**, "all checks passed":
   - unencrypted ext4 → **134 PASS** (`check_disk_format` reports `ext4 (unencrypted)`);
   - reinstalled btrfs-encrypted (LUKS2 root + separate encrypted swap) → **148 PASS** (LUKS2 ×2, `sd-encrypt` hook, keyfile 600, 2 dm-crypt mappings; snapshot stack opt-in installed & passing). kiro-report: `btrfs · LUKS2 (2 containers) · encrypted swap yes`, 0 UUID leaks.
-- **riker** (`192.168.1.14`, **encrypted** ext4-on-LUKS2 + separate encrypted swap, 2 containers) — **139 PASS / 0 WARN / 0 FAIL**, "all checks passed". On real hardware the encryption asserts all pass (LUKS2 ×2, `sd-encrypt` hook, `/crypto_keyfile.bin` 600 root:root, 2 active dm-crypt mappings); kiro-report shows `ext4 · LUKS2 (2 containers) · encrypted swap yes` with 0 raw UUIDs after redaction.
+- **metal-B** (`<ip>`, **encrypted** ext4-on-LUKS2 + separate encrypted swap, 2 containers) — **139 PASS / 0 WARN / 0 FAIL**, "all checks passed". On real hardware the encryption asserts all pass (LUKS2 ×2, `sd-encrypt` hook, `/crypto_keyfile.bin` 600 root:root, 2 active dm-crypt mappings); kiro-report shows `ext4 · LUKS2 (2 containers) · encrypted swap yes` with 0 raw UUIDs after redaction.
 
-This **closes the bare-metal encrypted gap** — full-disk LUKS is now verified on real hardware, not just in VMs. No VM-artifact caveat on either box. Encrypted layouts now proven across ext4/btrfs/xfs/jfs (VM) plus encrypted-ext4 on metal (riker).
+This **closes the bare-metal encrypted gap** — full-disk LUKS is now verified on real hardware, not just in VMs. No VM-artifact caveat on either box. Encrypted layouts now proven across ext4/btrfs/xfs/jfs (VM) plus encrypted-ext4 on metal (metal-B).
 
 ---
 
@@ -495,7 +497,7 @@ Per-path status of the NVIDIA modes:
   --autoconfigure` ran (`Start chwd` → `End chwd`, no `chwd-failed`/conflict). Confirms the remove-then-chwd
   clean-slate ordering works. **Still pending:** the NVIDIA *card* conflict case (chwd → `nvidia-open-dkms`
   on a modern card, or → `470xx`/`390xx` on an older one) — a VM routes to the `virtualbox` profile, so no
-  NVIDIA driver was installed; worf (Fermi) can only route to nouveau, never exercise this. Needs a real
+  NVIDIA driver was installed; metal-C (Fermi) can only route to nouveau, never exercise this. Needs a real
   modern/mid NVIDIA box.
 
 **Unrelated finding (not a blocker) — installed default kernel differs by firmware path:** the
@@ -507,7 +509,7 @@ install and boot fine; this is a default-selection nit, not a failure.
 **Verdict:** the 3-mode gating is **verified on VM** — `nonfree` (UEFI: nvidia kept, chwd skipped) and
 `nonfreechwd` (BIOS: nvidia removed, chwd ran clean), with `free` per the 2026-05-28 baseline. **The one
 remaining open verification** is chwd's proprietary NVIDIA install on real hardware (modern card →
-`nvidia-open-dkms`, older → `470xx`/`390xx`) — a VM can't exercise it and worf (Fermi) can't either.
+`nvidia-open-dkms`, older → `470xx`/`390xx`) — a VM can't exercise it and metal-C (Fermi) can't either.
 
 ---
 
@@ -519,15 +521,15 @@ All commits to `kiro-iso`, `kiro-calamares-config`, and `edu-system-files` since
 
 ---
 
-## 2026-05-29 — chwd NVIDIA routing on worf (nonfree path) — **PARTIAL: routing PASS, `nvidia-open-dkms` path untested** — real metal (Optimus laptop, UEFI)
+## 2026-05-29 — chwd NVIDIA routing on metal-C (nonfree path) — **PARTIAL: routing PASS, `nvidia-open-dkms` path untested** — real metal (Optimus laptop, UEFI)
 
-**Environment:** Test install on **worf** (`erik-p7624`), an Optimus laptop — Intel HD (2nd-gen) iGPU + NVIDIA **GF108M / GeForce GT 620M** (Fermi, PCI `10de:0de9`). Booted with the **non-free** GRUB entry (`driver=nonfree`). Transcribed into the test log from the `bdca88b` findings so the chwd integration shipping in production has a logged test (was previously only in the kiro-iso CHANGELOG).
+**Environment:** Test install on **metal-C** (`<host>`), an Optimus laptop — Intel HD (2nd-gen) iGPU + NVIDIA **GF108M / GeForce GT 620M** (Fermi, PCI `10de:0de9`). Booted with the **non-free** GRUB entry (`driver=nonfree`). Transcribed into the test log from the `bdca88b` findings so the chwd integration shipping in production has a logged test (was previously only in the kiro-iso CHANGELOG).
 
 **chwd routing — PASS.** Calamares log confirms `Kernel parameter 'driver' = nonfree` → `chwd --autoconfigure`, which made the right per-device calls: `intel` for the iGPU and **`nouveau` for the GT 620M**. chwd's device DB classifies that Fermi card as nouveau (not 390xx), so it never attempted a proprietary driver — pulled `nouveau-fw` + mesa/opencl and finished cleanly. Installed system runs Intel `i915` + Xorg `modesetting`; display healthy.
 
 **Patched chwd shipped — PASS (by inspection).** Installed box carries **`chwd 1.21.0-4`** (our patched build); `/var/lib/chwd/db/pci/graphic_drivers/profiles.toml` shows the patched `[nvidia-open-dkms]` block (`nvidia-open-dkms` + per-kernel `-headers`, old `${kernel}-nvidia-open` prebuilt logic gone). `linux-cachyos-nvidia-open` not installed.
 
-**KNOWN GAP — `nvidia-open-dkms` proprietary path NOT exercised.** worf's Fermi card routed to nouveau, so the `nvidia-open-dkms` profile never fired. The modern-NVIDIA + nonfree scenario (chwd selects `nvidia-open-dkms`, DKMS **builds** not just `added`, `nvidia-smi` works, no `linux-cachyos-nvidia-open`) is confirmed present/correct in config but **never run end-to-end**. Needs a box with a modern NVIDIA GPU that chwd routes to that profile. **Open at launch — documented limitation; install is non-fatal (nouveau fallback), and `nvidia-open-dkms` is known to build on 7.0 kernels.**
+**KNOWN GAP — `nvidia-open-dkms` proprietary path NOT exercised.** metal-C's Fermi card routed to nouveau, so the `nvidia-open-dkms` profile never fired. The modern-NVIDIA + nonfree scenario (chwd selects `nvidia-open-dkms`, DKMS **builds** not just `added`, `nvidia-smi` works, no `linux-cachyos-nvidia-open`) is confirmed present/correct in config but **never run end-to-end**. Needs a box with a modern NVIDIA GPU that chwd routes to that profile. **Open at launch — documented limitation; install is non-fatal (nouveau fallback), and `nvidia-open-dkms` is known to build on 7.0 kernels.**
 
 **KNOWN DEAD — `nvidia-390xx` (390.157) cannot build on the 7.0 kernel.** Manual DKMS build fails `nvidia/os-interface.c:1136: error: 'screen_info' undeclared` (removed from modern kernels); the EOL 390 branch is non-viable. For Fermi-class cards, **nouveau is the only working driver** — which is what chwd picks. The `nvidia_driver=390xx` ISO option + chwd `nvidia-dkms-390xx` profile are effectively dead; `470xx` likely the same (verify). A card routed there gets a driverless (non-fatal) system. See MASTER_TODO §1.
 
@@ -567,7 +569,7 @@ All commits to `kiro-iso`, `kiro-calamares-config`, and `edu-system-files` since
 
 ## 2026-05-28 — cachyos+zen, **fixes verified** — VirtualBox VM (UEFI, Intel i7-10700K)
 
-**Environment:** Same "Kiro" VirtualBox VM, UEFI/systemd-boot. New ISO built after [kiro-calamares-config](/home/erik/KIRO/kiro-calamares-config) commits `8195c9f` (multi-kernel install fixes: cmdline dedup + mkinitcpio churn cut) and `b49668c` (.gitignore for makepkg artifacts), plus [calamares-3.4.2.r4.g841b478-6](/home/erik/KIRO-PKG-BUILD/calamares-3.4.2.r4.g841b478-6/) package carrying the bootloader/main.py `list()` defensive copy. Calamares `3.4.3.20260528-841b4785-dirty`. Host: erik-virtualbox.
+**Environment:** Same "Kiro" VirtualBox VM, UEFI/systemd-boot. New ISO built after [kiro-calamares-config](/home/erik/KIRO/kiro-calamares-config) commits `8195c9f` (multi-kernel install fixes: cmdline dedup + mkinitcpio churn cut) and `b49668c` (.gitignore for makepkg artifacts), plus [calamares-3.4.2.r4.g841b478-6](/home/erik/KIRO-PKG-BUILD/calamares-3.4.2.r4.g841b478-6/) package carrying the bootloader/main.py `list()` defensive copy. Calamares `3.4.3.20260528-841b4785-dirty`. Host: <vm-host>.
 
 **Boot + install:** PASS, both fixes verified.
 
@@ -617,7 +619,7 @@ Both inherit the same `quiet nowatchdog rw root=UUID=… resume=UUID=… systemd
 
 ## 2026-05-28 — cachyos+zen default kernels — VirtualBox VM (UEFI, Intel i7-10700K)
 
-**Environment:** "Kiro" VirtualBox VM, UEFI/systemd-boot. Live ISO built today after the [build-the-iso.sh:101](build-scripts/build-the-iso.sh) `kernel=` flip from `linux-lqx` → `linux-cachyos linux-zen`. Calamares 3.4.3.20260528-841b4785-dirty. Host: erik-virtualbox.
+**Environment:** "Kiro" VirtualBox VM, UEFI/systemd-boot. Live ISO built today after the [build-the-iso.sh:101](build-scripts/build-the-iso.sh) `kernel=` flip from `linux-lqx` → `linux-cachyos linux-zen`. Calamares 3.4.3.20260528-841b4785-dirty. Host: <vm-host>.
 
 **Boot:** PASS — live ISO boots `7.0.10-1-cachyos` (cachyos = first in the space-separated `kernel=` list = live-boot per the [build-the-iso.sh:101](build-scripts/build-the-iso.sh) contract). XFCE desktop comes up clean, "Install kiro" launcher pre-trusted (the launcher-trust fix from earlier today held).
 

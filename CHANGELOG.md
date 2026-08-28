@@ -54,6 +54,29 @@ kiroproject.be in the same pass and redeployed.
 **Files Modified** — `RELEASES.md`.
 
 
+### Privacy: test machines recorded under generic labels
+
+`BUILD_TIMES.md` and `DISTRO_TESTING.md` recorded real hostnames and LAN addresses for the
+bare-metal test boxes — `192.168.x.x` addresses in the install-target column, plus machine and
+VM hostnames throughout the prose. Both files are tracked in a public repository, so this
+violated the standing rule that hostnames and IP addresses never go online.
+
+**Why:** the install log needs to distinguish *which* box and *which* firmware path a result
+came from; it never needed the machine's identity or address to do that.
+
+Replaced with stable generic labels that preserve every distinction the log actually relies on
+— `metal-A` / `metal-B` (bare metal, UEFI / systemd-boot), `metal-C` (bare metal, BIOS / grub,
+legacy NVIDIA), `kvm-vm` and `<vm-host>` for the virtual machines. Each file now carries a
+short legend above its tables documenting the convention, so future entries follow it rather
+than reintroducing real names. Hardware model references (e.g. `MEDION P7624`) are kept — a
+product model identifies a machine class, not a person or a host on a network.
+
+This scrubs the files going forward; it does not rewrite the already-published history.
+
+**Files Modified** — `BUILD_TIMES.md`, `DISTRO_TESTING.md`.
+(`kiro-iso-next/BUILD_TIMES.md` received the same scrub in its own repo.)
+
+
 ## 2026.08.25
 
 Version bump `v26.08.23` → `v26.08.25` across the three lockstep files
