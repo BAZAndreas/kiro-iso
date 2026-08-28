@@ -2,7 +2,22 @@
 
 > Complete history of the KIRO ISO project — newest first. Each entry explains not just what changed, but why it was done and what benefit it brings. Daily rebuilds (version bump + mirrorlist refresh only) are grouped into a single line.
 
-## 2026.08.25
+## 2026.09.01
+
+### Version bump `v26.08.25` → `v26.09.01` — the September release build
+
+Bumped the three lockstep files (`archiso/profiledef.sh` — both `iso_label` and `iso_version`,
+`archiso/airootfs/etc/dev-rel`, `build-scripts/build-the-iso.sh`) from the last development
+stamp to the release version, and built the public ISO: **`kiro-v26.09.01-x86_64.iso`**, 6.2 GB,
+MD5 `8b1367e84fc53eb77351ddb35a67211c`, built in 9m4s and logged in `BUILD_TIMES.md`.
+
+This is the first public ISO since **v26.07.01** — there is no August release, as July and
+August are the holiday period. The six intermediate stamps between them were development builds.
+No configuration changes in this repo for this release; the substance comes from the package
+updates pulled in by the rebuild, documented in `RELEASES.md`.
+
+**Files Modified** — `archiso/profiledef.sh`, `archiso/airootfs/etc/dev-rel`,
+`build-scripts/build-the-iso.sh`, `BUILD_TIMES.md`.
 
 ### `RELEASES.md` — the v26.09.01 release section written
 
@@ -23,6 +38,23 @@ names v26.09.01 as the current release rather than forward-referencing it.
 
 **Files Modified** — `RELEASES.md`.
 
+### `RELEASES.md` — name ATT as the owner of each tool feature
+
+Two bullet leads described a "picker" and a "page" without naming what they belong to, resolving
+the owner only one clause into the body. In a release entry that also covers Calamares installer
+fixes, "the Wayland picker is finished" and "a new Celestial themes page" both read as parts of
+the **installer** rather than the Arch Linux Tweak Tool. The leads now say "**ATT's** Wayland
+picker is finished" and "a new Celestial themes page **in ATT**". The two Btrfs bullets already
+read "the Btrfs page **in ATT**" and were left alone.
+
+The same ambiguity had been carried into the website's release card, where it was worse: that
+card is condensed, so the clarifying body clause was not there to rescue the lead. Corrected on
+kiroproject.be in the same pass and redeployed.
+
+**Files Modified** — `RELEASES.md`.
+
+
+## 2026.08.25
 
 Version bump `v26.08.23` → `v26.08.25` across the three lockstep files
 (`archiso/profiledef.sh`, `archiso/airootfs/etc/dev-rel`, `build-scripts/build-the-iso.sh`)
